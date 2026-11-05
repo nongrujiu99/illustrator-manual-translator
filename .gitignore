@@ -1,0 +1,10 @@
+/*.ai
+/*.pdf
+/tmp/
+/dist/
+/.superpowers/
+/node_modules/
+/extension/dist/
+*.log
+.env*
+
