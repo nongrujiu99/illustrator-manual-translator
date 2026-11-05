@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>说明书翻译</title>
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+  <header>
+    <h1>说明书翻译</h1>
+    <p>选中文字快速翻译，或批量处理整份文档</p>
+  </header>
+  <main>
+    <section id="quickStep">
+      <h2>翻译所选文字</h2>
+      <label>目标语言
+        <select id="targetLanguage">
+          <option value="en">英语</option><option value="zh">简体中文</option><option value="zh-TW">繁体中文</option>
+          <option value="ja">日语</option><option value="ko">韩语</option><option value="fr">法语</option>
+          <option value="de">德语</option><option value="es">西班牙语</option><option value="pt">葡萄牙语</option><option value="ru">俄语</option>
+        </select>
+      </label>
+      <button id="manualTranslate" type="button">翻译所选文字</button>
+      <small>先在 Illustrator 中选中文字框。译文会直接替换当前文字，可撤销；不会自动保存。</small>
+      <nav class="settings-nav" aria-label="设置">
+        <button id="openApiSettings" type="button">高级设置</button>
+        <button id="openTypographySettings" type="button">文字排版</button>
+        <button id="openGlossarySettings" type="button">术语表</button>
+      </nav>
+      <small class="settings-hint">在高级设置中保存渠道预设，下次打开可直接切换。</small>
+    </section>
+
+    <section id="documentStep">
+      <h2>批量翻译文档</h2>
+      <div id="summary" class="summary">请先在 Illustrator 中打开 AI 或可编辑 PDF。</div>
+      <button id="scan">读取当前文档</button>
+      <section id="modelStep" hidden>
+        <button id="translate" disabled>开始翻译</button>
+      </section>
+    </section>
+
+    <section id="apiSettingsStep" hidden>
+      <h2>高级设置</h2>
+      <p class="section-description">切换已保存的渠道，或填写新配置</p>
+      <label>已保存的渠道
+        <select id="profileSelect"><option value="">当前配置（未保存）</option></select>
+      </label>
+      <div class="profile-actions">
+        <button id="newProfile" class="secondary" type="button">新建预设</button>
+        <button id="deleteProfile" class="secondary" type="button" disabled>删除当前预设</button>
+      </div>
+      <label>预设名称
+        <input id="profileName" autocomplete="off" placeholder="例如：Comfly 翻译">
+      </label>
+      <label>API Key
+        <input id="apiKey" type="password" autocomplete="off" placeholder="填入当前渠道的 API Key">
+      </label>
+      <label>模型服务
+        <select id="provider">
+          <option value="aliyun-cn">阿里云百炼 · 北京</option>
+          <option value="aliyun-intl">阿里云百炼 · 新加坡</option>
+          <option value="custom">自定义接口</option>
+        </select>
+      </label>
+      <label>模型接口 HTTPS 地址
+        <input id="endpoint" placeholder="https://.../chat/completions">
+      </label>
+      <label>模型名
+        <input id="model" placeholder="模型名称">
+      </label>
+      <small>阿里云接口地域须与 Key 地域一致；其他渠道请使用其完整 Chat Completions 地址。</small>
+      <button id="saveProfile" class="outlined" type="button">保存预设</button>
+      <small>Key 使用当前 Windows 账户加密保存；换电脑需重新填写。</small>
+      <button id="testApi" type="button">测试连接</button>
+      <small>发送短请求，不包含文档内容；可能产生少量 Token 用量。</small>
+      <button id="backFromApi" class="secondary" type="button">返回翻译</button>
+    </section>
+
+    <section id="typographyStep" hidden>
+      <h2>文字排版</h2>
+      <label>字号处理
+        <select id="fontFitMode">
+          <option value="shrink">需要时自动缩小</option>
+          <option value="preserve">保持原字号</option>
+        </select>
+      </label>
+      <div class="fit-grid">
+        <label>最多缩小字号（%）
+          <input id="maxShrinkPercent" type="number" min="0" max="30" step="1" value="10">
+        </label>
+        <label>点文字可超宽（%）
+          <input id="pointWidthTolerance" type="number" min="0" max="100" step="1" value="10">
+        </label>
+      </div>
+      <small>不会放大字号；超出限制时提示复核。手动和批量翻译共用。</small>
+      <button id="backFromTypography" class="secondary" type="button">返回翻译</button>
+    </section>
+
+    <section id="glossaryStep" hidden>
+      <h2>术语表</h2>
+      <label>每行：原文=译文
+        <textarea id="glossary" rows="5"></textarea>
+      </label>
+      <button id="backFromGlossary" class="secondary" type="button">返回翻译</button>
+    </section>
+
+    <section id="reviewStep" hidden>
+      <h2>译文已生成 <span id="progress"></span></h2>
+      <details id="reviewDetails">
+        <summary>查看或修改译文</summary>
+        <div id="segments"></div>
+      </details>
+      <button id="apply" disabled>应用到 AI 工作副本</button>
+      <button id="editSettings" class="secondary">修改设置并重新翻译</button>
+    </section>
+
+    <section id="saveStep" hidden>
+      <h2>保存翻译版</h2>
+      <label>保存路径
+        <input id="output" placeholder="完整路径，以 .ai 结尾">
+      </label>
+      <button id="save" disabled>另存翻译版 .ai</button>
+      <button id="backToStart" class="secondary" type="button">返回翻译</button>
+    </section>
+
+    <section id="issueStep" hidden>
+      <details id="issueDetails">
+        <summary>需复核 <span id="issueCount"></span></summary>
+        <div id="issues"></div>
+      </details>
+    </section>
+    <div id="status" role="status"></div>
+  </main>
+  <script src="js/core/segments.js"></script>
+  <script src="js/core/translation.js"></script>
+  <script src="js/core/job.js"></script>
+  <script src="js/core/provider.js"></script>
+  <script src="js/core/profiles.js"></script>
+  <script src="js/core/key-vault.js"></script>
+  <script src="js/bridge.js"></script>
+  <script src="js/panel.js"></script>
+</body>
+</html>

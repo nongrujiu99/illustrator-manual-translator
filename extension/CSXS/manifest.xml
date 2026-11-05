@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.codex.manualtranslator" ExtensionBundleVersion="0.1.2" ExtensionBundleName="说明书翻译">
+  <ExtensionList><Extension Id="com.codex.manualtranslator.panel" Version="0.1.2"/></ExtensionList>
+  <ExecutionEnvironment>
+    <HostList><Host Name="ILST" Version="[23.0,99.9]"/></HostList>
+    <LocaleList><Locale Code="All"/></LocaleList>
+    <RequiredRuntimeList><RequiredRuntime Name="CSXS" Version="9.0"/></RequiredRuntimeList>
+  </ExecutionEnvironment>
+  <DispatchInfoList><Extension Id="com.codex.manualtranslator.panel"><DispatchInfo>
+    <Resources><MainPath>./index.html</MainPath><ScriptPath>./host/bootstrap.jsx</ScriptPath><CEFCommandLine><Parameter>--enable-nodejs</Parameter></CEFCommandLine></Resources>
+    <Lifecycle><AutoVisible>true</AutoVisible></Lifecycle>
+    <UI><Type>Panel</Type><Menu>说明书翻译</Menu><Geometry><Size><Width>430</Width><Height>650</Height></Size><MinSize><Width>360</Width><Height>460</Height></MinSize></Geometry></UI>
+  </DispatchInfo></Extension></DispatchInfoList>
+</ExtensionManifest>
